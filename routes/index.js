@@ -12,7 +12,7 @@ exports.index = function(req, res){
   		{ name: 'Andermatt' , lat: 46.6329, lon: 8.59475, query: 'Andermatt', id: 2658592},
   		{ name: 'Engelberg' , query: 'Engelberg', id: 2658786},
   		{ name: 'Saas Fee' , query: 'Saas Fee', id: 2658811},
-  		{ name: 'Chamonix Mont Blanc' , query: 'Chamonix-Mt.-Blanc', id: 2979698},
+  		{ name: 'Chamonix Mt Blanc' , query: 'Chamonix-Mont-Blanc', id: 2979698},
   		{ name: 'Arosa' , query: 'Arosa', id: 2661712 },
   		{ name: 'Flumserberg' , query:'Flumserberg', id: 2658061},
   		{ name: 'Verbier' , query:'Verbier', id: 2661641 },

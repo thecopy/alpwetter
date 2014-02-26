@@ -33,7 +33,7 @@ $( '.get-weather' ).click(function() {
         return;
 
     $(this).prop("disabled",true);
-    $('#loader').show();
+    $('.get-weather').text("Laden...");
     selected.forEach(function(x){
         console.log(x)
         if(x.id != null)
@@ -99,7 +99,7 @@ function jsonCallback(data, query){
     setWeather(data,query);  
 
     $('.get-weather').prop("disabled",false);
-    $('#loader').hide();
+    $('.get-weather').text("Los!");
 }
 
 function setWeather(jsonData, query) {

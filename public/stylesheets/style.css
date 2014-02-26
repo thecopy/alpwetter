@@ -7,6 +7,7 @@ body{
 	background-size: 100%;
 	background-image: url('/images/nepal.jpg');
 	background-color: black;
+	background-attachment: fixed;
 	background-repeat:no-repeat;
 	margin-top: 50px;
 	font-family: 'Gafata', sans-serif;
