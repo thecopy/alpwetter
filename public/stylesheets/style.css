@@ -10,6 +10,7 @@ body{
 	background-repeat:no-repeat;
 	margin-top: 50px;
 	font-family: 'Gafata', sans-serif;
+
 }
 
 ul { 
@@ -24,21 +25,54 @@ table{
 	width: 98%;
 }
 
+label, h1,h2,h3,h4,h5,h6{
+	color: white;
+}
+
+table tr th, table tr td, table tr:nth-of-type(2n){
+	background-color: transparent;
+	color:white;
+}
+
+table{
+    background: rgba(255, 255, 255, 0.25);
+}
+
 h2,h3,h5, h4{
 	font-family: 'Gafata', sans-serif;
 }
 
+hr{
+	border-bottom-color: rgba(255, 255, 255, 0.25);
+	border-top-color: rgba(255, 255, 255, 0.25);
+}
+
 .main-content{
 	border-width: 0;
+
+	padding: 80px;
 	border-color: black;
 	border-style: solid;
-	border-left-width: 15px;
-	border-right-width: 5px;
+
+    background: rgba(255, 255, 255, 0.15);
+	/*border-left-width: 15px;*/
+	/*border-right-width: 5px;*/
+}
+
+.black-shadow{
+	text-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+}
+
+.darker-background{
+    background: rgba(0, 0, 0, 0.25);
+}
+
+.white-shadow{
+	text-shadow: 0 0 4px rgba(255, 255, 255, 0.4);
 }
 
 .row{
-	background-color: #E4F1FA;
-	padding: 20px;
+	color: white;
 }
 .top-bar{
 	background-color: transparent;
@@ -49,7 +83,57 @@ h2,h3,h5, h4{
 	font-size: 80pt;
 }
 
-.resort-label{
+.footer{
+	text-align: center;
+}
+
+.subtitle{
+	text-align: center;
+}
+
+.no-margin{
+	margin: 0px;
+}
+
+.resort-container{
+	padding-top: 20px;
+}
+
+.resort-label{	
+	padding:3px;
+	padding-bottom:4px;
 	display: inline-block;
 	width: 200px;
+	height: 30px;
+
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.resort-label-selected{	
+    background: rgba(255, 255, 255, 0.15);
+}
+
+
+.resort-label input[type=checkbox]{	
+	cursor: pointer;
+}
+
+
+label{
+	font-size: 12pt;
+
+}
+
+.resort-label span{
+	margin: 0;
+	padding: 10px;
+}
+
+.resort-label:hover{
+    background: rgba(0, 0, 0, 0.5);
 }

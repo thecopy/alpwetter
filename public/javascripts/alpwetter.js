@@ -1,3 +1,14 @@
+$( '.resort-label').click(function() {
+    var elem = null;
+    if($(this).hasClass("resort-label")){
+        elem = $(this);
+    }else{
+        elem = $(this).closest(".resort-label");
+    }   
+
+    elem.toggleClass("resort-label-selected");
+});
+
 $( '.get-weather' ).click(function() {
 
     console.log('Getting weather...')
@@ -5,13 +16,14 @@ $( '.get-weather' ).click(function() {
     var selected = new Array();
     $('.resort-checkbox:checked').each(function() {
         var elem = $(this);
-        console.log("* " + elem.attr('value') + ", (" + elem.attr('data-lat') + ", " + elem.attr("data-lon") + ")");
+        console.log("* " + elem.attr('value') + ", " + elem.attr("data-id") + ", (" + elem.attr('data-lat') + ", " + elem.attr("data-lon") + ")");
 
         selected.push({
             name : elem.attr('value'),
             lat : elem.attr('data-lat'),
             lon : elem.attr('data-lon'),
-            query: elem.attr('data-query')
+            query: elem.attr('data-query'),
+            id : elem.attr('data-id')
         });
     });
 
@@ -24,8 +36,9 @@ $( '.get-weather' ).click(function() {
     $('#loader').show();
     selected.forEach(function(x){
         console.log(x)
-
-        if(x.query != null)
+        if(x.id != null)
+            getWeatherById(x.id, x.query)
+        else if(x.query != null)
             getWeatherByQuery(x.query)
         else
             getWeather(x.lat, x.lon)
@@ -53,35 +66,40 @@ function hideshow(who) {
 }
 
 
+function getWeatherById(id, query) {
+    console.log('Fetching json using id');
+    var requestString = "http://api.openweathermap.org/data/2.5/forecast/daily?"
+        + "id=" + id
+        + "&mode=json&units=metric&cnt=7"
+
+    $.getJSON( requestString, function(data) { jsonCallback(data, query) });}
+
 function getWeatherByQuery(query) {
     console.log('Fetching json using query');
     var requestString = "http://api.openweathermap.org/data/2.5/forecast/daily?"
         + "q=" + query
         + "&mode=json&units=metric&cnt=7"
 
-    $.getJSON( requestString, function( data ) {
-        console.log("Got JSON! :)");    
-        console.log(data);  
-        setWeather(data,query);  
-        $('.get-weather').prop("disabled",false);
-        $('#loader').hide();
-    });
+    $.getJSON( requestString, function(data) { jsonCallback(data, query) });
 }
 
-function getWeather(lat, long) {
+function getWeather(lat, lon) {
     console.log('Fetching json using coord');
     var requestString = "http://api.openweathermap.org/data/2.5/forecast/daily?"
         + "lat=" + lat
-        + "&lon=" + long
+        + "&lon=" + lon
         + "&mode=json&units=metric&cnt=7"
 
-    $.getJSON( requestString, function( data ) {
-        console.log("Got JSON! :)");    
-        console.log(data);  
-        setWeather(data);  
-        $('.get-weather').prop("disabled",false);
-        $('#loader').hide();
-    });
+    $.getJSON( requestString, jsonCallback);
+}
+
+function jsonCallback(data, query){
+    console.log("Got JSON for city " + data.city.name + "(" + data.city.id + ")");    
+    console.log(data);  
+    setWeather(data,query);  
+
+    $('.get-weather').prop("disabled",false);
+    $('#loader').hide();
 }
 
 function setWeather(jsonData, query) {
@@ -96,7 +114,9 @@ function setWeather(jsonData, query) {
     var location = query;
     if(location == null)
         location = jsonData.city.name;
-    
+
+    console.log("Requested location: " + query + ", response: " + jsonData.city.name);
+
     elem.find('h2').text(location);
     elem.find('a').prop('href', 'https://www.google.com/maps/@' + jsonData.city.coord.lat + ',' + jsonData.city.coord.lon + ',13z');
 

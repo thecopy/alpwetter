@@ -11,32 +11,34 @@ mixin tableFiller(val)
 
 block content
   div.row.main-content
-    h1.title-text ALPWETTER
+    hr
+    h1.title-text.black-shadow ALPWETTER
      small .ch
+    h2.black-shadow.subtitle Wohin sollen Sie fahren?      
     hr
-    h4.
-      Bitte wählen Sie die Resorts Sie möchten die Wetter für sehen
-    hr
-    div
+    div.black-shadow
       button(class=['select-all', 'button', 'tiny']) Alles 
       | &nbsp;
       button(class=['select-none', 'button', 'tiny']) Keine
-      ul
-        each r in availableResorts
-          li.resort-label
-            label
-              input(type='checkbox', class=['resort-checkbox'], name='resorts', value=r.name, 
-                data-lat=r.lat, data-lon=r.lon, data-query=r.query)
-              span
-                b #{r.name}
+      div.darker-background.resort-container
+        ul
+          each r in availableResorts
+            li.resort-label
+              label
+                input(type='checkbox', class=['resort-checkbox'], name='resorts', value=r.name, 
+                  data-lat=r.lat, data-lon=r.lon, data-query=r.query, data-id=r.id)
+                span
+                  b #{r.name}
 
-      button(class=['get-weather', 'button', 'radius', 'large', 'expand']) Los!
+        button(class=['get-weather', 'button', 'radius', 'large', 'expand', 'no-margin']) Los!
       img#loader(src='/images/loader.gif', style='display:none')
+
+    hr
 
     div(id='the-weather', class='row')
       ul
       
-    div.row
+    div.row.footer
       h5 von Erik Jonsson Thorén. erikjonssonthoren at gmail
 
 
@@ -45,10 +47,10 @@ block content
 
 
   li(class='template-weather-node', style=['display:none'])
-    h2 City
+    h2.white-shadow City
     a Google Maps
 
-    table
+    table.white-shadow
       thead
         tr
           th 
