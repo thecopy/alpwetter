@@ -1,0 +1,55 @@
+.hide-show-weather-details{
+	cursor: pointer;
+	color: #2ba6cb;
+}
+
+body{
+	background-size: 100%;
+	background-image: url('/images/nepal.jpg');
+	background-color: black;
+	background-repeat:no-repeat;
+	margin-top: 50px;
+	font-family: 'Gafata', sans-serif;
+}
+
+ul { 
+	list-style: none 
+}
+
+label span{
+	margin-left: 5px;
+}
+
+table{
+	width: 98%;
+}
+
+h2,h3,h5, h4{
+	font-family: 'Gafata', sans-serif;
+}
+
+.main-content{
+	border-width: 0;
+	border-color: black;
+	border-style: solid;
+	border-left-width: 15px;
+	border-right-width: 5px;
+}
+
+.row{
+	background-color: #E4F1FA;
+	padding: 20px;
+}
+.top-bar{
+	background-color: transparent;
+}
+
+.title-text{
+	font-family: 'Monoton', cursive;
+	font-size: 80pt;
+}
+
+.resort-label{
+	display: inline-block;
+	width: 200px;
+}

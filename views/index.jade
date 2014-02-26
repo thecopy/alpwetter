@@ -1,0 +1,98 @@
+extends layout
+
+mixin tableFiller(val)
+    td= val
+    td= val
+    td= val
+    td= val
+    td= val
+    td= val
+    td= val
+
+block content
+  div.row.main-content
+    h1.title-text ALPWETTER
+     small .ch
+    hr
+    h4.
+      Bitte wählen Sie die Resorts Sie möchten die Wetter für sehen
+    hr
+    div
+      button(class=['select-all', 'button', 'tiny']) Alles 
+      | &nbsp;
+      button(class=['select-none', 'button', 'tiny']) Keine
+      ul
+        each r in availableResorts
+          li.resort-label
+            label
+              input(type='checkbox', class=['resort-checkbox'], name='resorts', value=r.name, 
+                data-lat=r.lat, data-lon=r.lon, data-query=r.query)
+              span
+                b #{r.name}
+
+      button(class=['get-weather', 'button', 'radius', 'large', 'expand']) Los!
+      img#loader(src='/images/loader.gif', style='display:none')
+
+    div(id='the-weather', class='row')
+      ul
+      
+    div.row
+      h5 von Erik Jonsson Thorén. erikjonssonthoren at gmail
+
+
+  script(type='text/javascript' src='/javascripts/jquery2.1.0.js')
+  script(type='text/javascript' src='/javascripts/alpwetter.js')
+
+
+  li(class='template-weather-node', style=['display:none'])
+    h2 City
+    a Google Maps
+
+    table
+      thead
+        tr
+          th 
+            i(class=['foundicon-plus', 'hide-show-weather-details'], onclick='hideshow(this)')
+          th 
+          th Heute
+          th Morgen
+          th Day+2
+          th Day+3
+          th Day+4
+          th Day+5
+          th Day+6
+      tbody
+        tr(class='icon')
+          td
+          td Icon
+          +tableFiller('-')
+
+        tr(class='weather')
+          td
+          td Sky
+          +tableFiller('Clear')
+
+        tr(class='clouds')
+          td
+          td Cloud Cover
+          +tableFiller('0mm')
+
+        tr(class=['morn-temp', 'hideable'])
+          td
+          td Morning Temp
+          +tableFiller('0')
+
+        tr(class='day-temp')
+          td
+          td Midday Temp
+          +tableFiller('1')
+
+        tr(class=['even-temp', 'hideable'])
+          td
+          td Evening Temp
+          +tableFiller('2')
+
+        tr(class=['wind', 'hideable'])
+          td
+          td Wind
+          +tableFiller('2 m/s')
