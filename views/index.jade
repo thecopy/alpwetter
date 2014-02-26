@@ -39,7 +39,8 @@ block content
       ul
       
     div.row.footer
-      h5 von Erik Jonsson Thorén. erikjonssonthoren at gmail
+      h5 von Erik Jonsson Thorén,
+        a(href='http://www.erikfromsweden.org') www.erikfromsweden.org
       small Weather Provider: http://openweathermap.org/
 
 
@@ -53,9 +54,8 @@ block content
     table.darker-background
       thead
         tr
-          th 
-            i(class=['foundicon-plus', 'hide-show-weather-details'], onclick='hideshow(this)')
-          th 
+          th(colspan=2) 
+            i(class=['foundicon-plus', 'hide-show-weather-details'], onclick='hideshow(this)') Mehr
           th Heute
           th Morgen
           th Day+2
@@ -66,17 +66,17 @@ block content
       tbody
         tr(class='icon')
           td
-          td Icon
+          td 
           +tableFiller('-')
 
         tr(class='weather')
           td
-          td Sky
+          td Himmel
           +tableFiller('Clear')
 
         tr(class='clouds')
           td
-          td Cloud Cover
+          td Wolken
           +tableFiller('0mm')
 
         tr(class=['morn-temp', 'hideable'])
