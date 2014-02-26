@@ -118,7 +118,7 @@ function setWeather(jsonData, query) {
     console.log("Requested location: " + query + ", response: " + jsonData.city.name);
 
     elem.find('h2').text(location);
-    elem.find('a').prop('href', 'https://www.google.com/maps/@' + jsonData.city.coord.lat + ',' + jsonData.city.coord.lon + ',13z');
+    //elem.find('a').prop('href', 'https://www.google.com/maps/@' + jsonData.city.coord.lat + ',' + jsonData.city.coord.lon + ',13z');
 
 
     for(var i = 0; i<jsonData.list.length; i++){
