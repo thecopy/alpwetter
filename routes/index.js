@@ -18,7 +18,8 @@ exports.index = function(req, res){
   		{ name: 'Verbier' , query:'Verbier', id: 2661641 },
   		{ name: 'St. Moritz - Corviglia' , query:'St. Moritz - Corviglia', id: 2658813},
   		{ name: 'Grindelwald' , query: 'Grindelwald', id: 2660498 },
-  		{ name: 'Flims, Laax', query: 'Flims, Laax', id: 2660757 }
+  		{ name: 'Flims, Laax', query: 'Flims, Laax', id: 2660757 },
+      { name: 'Sankt Anton', query: 'Sant Anton am Arlberg', lat: 47.127499, lon: 10.26372, id: 2766757}
   	]
   });
 };
