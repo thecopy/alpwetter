@@ -62,8 +62,9 @@ function hideshow(who) {
     table.find('tr.hideable').toggle();
 
     button.toggleClass( "foundicon-plus" ).toggleClass( "foundicon-minus" )
+    button.text(button.text() == "Mehr" ? "Weniger" : "Mehr");
 
-}
+ }
 
 
 function getWeatherById(id, query) {
@@ -124,7 +125,7 @@ function setWeather(jsonData, query) {
     for(var i = 0; i<jsonData.list.length; i++){
         var date = moment(addDays(today,i));
         if(i > 1)
-            elem.find('table thead th:eq(' + (i+2) + ')').text(date.format('ddd, Do MMM '))
+            elem.find('table thead th:eq(' + (i+1) + ')').text(date.format('ddd, Do MMM '))
 
         var imgUrl = 'http://openweathermap.org/img/w/' + jsonData.list[i].weather[0].icon + '.png';
         elem.find('table tbody tr.icon td:eq(' + (i+2) + ')').html('<img src="' + imgUrl + '"/>');
