@@ -1,3 +1,5 @@
+
+
 $( '.resort-label').click(function() {
     var elem = null;
     if($(this).hasClass("resort-label")){
@@ -37,11 +39,9 @@ $( '.get-weather' ).click(function() {
     selected.forEach(function(x){
         console.log(x)
         if(x.id != null)
-            getWeatherById(x.id, x.query)
-        else if(x.query != null)
-            getWeatherByQuery(x.query)
+            getWeatherByWoeid(x.id, x.query)
         else
-            getWeather(x.lat, x.lon)
+        console.error('missing id')
     });
 });
 
@@ -67,32 +67,16 @@ function hideshow(who) {
  }
 
 
-function getWeatherById(id, query) {
-    console.log('Fetching json using id');
-    var requestString = "http://api.openweathermap.org/data/2.5/forecast/daily?"
-        + "id=" + id
-        + "&mode=json&units=metric&cnt=7"
+function getWeatherByWoeid(woeid, query, fn) {
+    console.log('Fetching json using woeid ' + woeid);
 
-    $.getJSON( requestString, function(data) { jsonCallback(data, query) });}
+    var requestString = "/api/weather?woeid="+woeid;
+    
+    fn = typeof fn !== 'undefined' ? fn : jsonCallback;
 
-function getWeatherByQuery(query) {
-    console.log('Fetching json using query');
-    var requestString = "http://api.openweathermap.org/data/2.5/forecast/daily?"
-        + "q=" + query
-        + "&mode=json&units=metric&cnt=7"
-
-    $.getJSON( requestString, function(data) { jsonCallback(data, query) });
+    $.getJSON( requestString, function(data) { fn(data, query) });
 }
 
-function getWeather(lat, lon) {
-    console.log('Fetching json using coord');
-    var requestString = "http://api.openweathermap.org/data/2.5/forecast/daily?"
-        + "lat=" + lat
-        + "&lon=" + lon
-        + "&mode=json&units=metric&cnt=7"
-
-    $.getJSON( requestString, jsonCallback);
-}
 
 function jsonCallback(data, query){
     console.log("Got JSON for city " + data.city.name + "(" + data.city.id + ")");    
@@ -119,8 +103,6 @@ function setWeather(jsonData, query) {
     console.log("Requested location: " + query + ", response: " + jsonData.city.name);
 
     elem.find('h2').text(location);
-    //elem.find('a').prop('href', 'https://www.google.com/maps/@' + jsonData.city.coord.lat + ',' + jsonData.city.coord.lon + ',13z');
-
 
     for(var i = 0; i<jsonData.list.length; i++){
         var date = moment(addDays(today,i));
@@ -129,12 +111,12 @@ function setWeather(jsonData, query) {
 
         var imgUrl = 'http://openweathermap.org/img/w/' + jsonData.list[i].weather[0].icon + '.png';
         elem.find('table tbody tr.icon td:eq(' + (i+2) + ')').html('<img src="' + imgUrl + '"/>');
-        elem.find('table tbody tr.morn-temp td:eq(' + (i+2) + ')').text(Math.round(jsonData.list[i].temp.morn) + ' °C');
-        elem.find('table tbody tr.day-temp td:eq(' + (i+2) + ')').text(Math.round(jsonData.list[i].temp.day) + ' °C');
-        elem.find('table tbody tr.even-temp td:eq(' + (i+2) + ')').text(Math.round(jsonData.list[i].temp.eve) + ' °C');
+        elem.find('table tbody tr.temp td:eq(' + (i+2) + ')').text(Math.round(jsonData.list[i].main.temp) + ' °C');
+        elem.find('table tbody tr.min-temp td:eq(' + (i+2) + ')').text(Math.round(jsonData.list[i].main.temp_min) + ' °C');
+        elem.find('table tbody tr.max-temp td:eq(' + (i+2) + ')').text(Math.round(jsonData.list[i].main.temp_max) + ' °C');
         elem.find('table tbody tr.weather td:eq(' + (i+2) + ')').text(jsonData.list[i].weather[0].main);
-        elem.find('table tbody tr.clouds td:eq(' + (i+2) + ')').text(jsonData.list[i].clouds + '%');
-        elem.find('table tbody tr.wind td:eq(' + (i+2) + ')').text(jsonData.list[i].speed + 'm/s');
+        elem.find('table tbody tr.clouds td:eq(' + (i+2) + ')').text(jsonData.list[i].clouds.all + '%');
+        elem.find('table tbody tr.wind td:eq(' + (i+2) + ')').text(jsonData.list[i].wind.speed + 'm/s');
     }
 
     elem.find('tr.hideable').hide();
@@ -146,3 +128,16 @@ function addDays(date, days) {
   d2.setDate(d2.getDate() + days);
   return d2;
 }
+
+weatherIconsMap = {
+    '01': 'wi-day-sunny',
+    '02': 'wi-day-cloudy-high',
+    '03': 'wi-cloud',
+    '04': 'wi-cloudy',
+    '09': 'wi-showers',
+    '10': 'wi-rain',
+    '11': 'wi-day-thunderstorm',
+    '12': 'wi-day-snow',
+    '50': 'wi-fog'
+}
+

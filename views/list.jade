@@ -1,0 +1,93 @@
+extends layout
+
+mixin tableFiller(val)
+    td= val
+    td= val
+    td= val
+    td= val
+    td= val
+    td= val
+    td= val
+
+block content
+  div.row.main-content
+    hr
+    h1.title-text.black-shadow ALPWETTER
+     small .ch
+    h2.black-shadow.subtitle Wohin sollen Sie fahren?
+    hr
+
+    h4.subtitle Oder wählen resort:
+
+    div.black-shadow
+      button(class=['select-all', 'button', 'tiny']) Alles 
+      | &nbsp;
+      button(class=['select-none', 'button', 'tiny']) Keine
+      div.darker-background.resort-container
+        ul
+          each r in availableResorts
+            li.resort-label
+              label
+                input(type='checkbox', class=['resort-checkbox'], name='resorts', value=r.name, 
+                  data-lat=r.lat, data-lon=r.lon, data-query=r.query, data-id=r.id)
+                span
+                  b #{r.name}
+
+        button(class=['get-weather', 'button', 'radius', 'large', 'expand', 'no-margin']) Los!
+      img#loader(src='/images/loader.gif', style='display:none')
+
+    hr
+
+    div(id='the-weather', class='row')
+      ul
+      
+    div.row.footer
+      h5 von Erik Jonsson Thorén,
+        a(href='http://www.erikfromsweden.org') www.erikfromsweden.org
+      small Weather Provider: http://openweathermap.org/
+
+
+  script(type='text/javascript' src='/javascripts/jquery2.1.0.js')
+  script(type='text/javascript' src='/javascripts/alpwetter.js')
+
+
+  li(class='template-weather-node', style=['display:none'])
+    h2.black-shadow City
+    
+    table.darker-background
+      thead
+        tr
+          th(colspan=2) 
+            i(class=['foundicon-plus', 'hide-show-weather-details'], onclick='hideshow(this)') Mehr
+          th Heute
+          th Morgen
+          th Day+2
+          th Day+3
+          th Day+4
+          th Day+5
+          th Day+6
+      tbody
+        tr(class='icon')
+          td
+          td 
+          +tableFiller('-')
+
+        tr(class='weather')
+          td
+          td Himmel
+          +tableFiller('Clear')
+
+        tr(class='temp')
+          td
+          td Average Temperature
+          +tableFiller('?')
+
+        tr(class=['min-temp', 'hideable'])
+          td
+          td Min Temp
+          +tableFiller('?')
+
+        tr(class=['max-temp', 'hideable'])
+          td
+          td Max Temp
+          +tableFiller('?')

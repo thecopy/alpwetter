@@ -10,13 +10,16 @@ html
     link(rel='stylesheet', href='/stylesheets/foundation.css')
     link(rel='stylesheet', href='/stylesheets/general_enclosed_foundicons.css')    
     link(rel='stylesheet', href='/stylesheets/style.css')
-    link(rel='stylesheet', type='text/css', href='http://fonts.googleapis.com/css?family=Monoton|Gafata')
+    link(rel='stylesheet', href='/stylesheets/weather-icons.css')
+    link(rel='stylesheet', type='text/css', href='http://fonts.googleapis.com/css?family=Monoton|Gafata' async)
+    script(type='text/javascript' src='/javascripts/vendor/jquery.js')
 
   body
     block content
 
+    script(type='text/javascript' src='/javascripts/alpwetter.js')
     script(type='text/javascript' src='/javascripts/foundation.min.js')
-    script(type='text/javascript' src='/javascripts/moment.js')
+    script(defer async type='text/javascript' src='/javascripts/moment.js')
     script.        
         $(document).foundation();
 

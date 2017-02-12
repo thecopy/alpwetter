@@ -1,100 +1,132 @@
 extends layout
 
-mixin tableFiller(val)
-    td= val
-    td= val
-    td= val
-    td= val
-    td= val
-    td= val
-    td= val
+mixin from_location(url_name, name)
+  if typeof from_key !== "undefined"
+    if from_key === url_name
+      li.selected 
+        a(href='/von/'+url_name) #{name}
+    else
+      li.unselected
+        a(href='/von/'+url_name) #{name}
+  else
+    li
+      a(href='/von/'+url_name) #{name}
 
 block content
   div.row.main-content
     hr
-    h1.title-text.black-shadow ALPWETTER
-     small .ch
-    h2.black-shadow.subtitle Wohin sollen Sie fahren?      
+    h1.title-text.black-shadow
+      a(href='/') ALPWETTER
+    h2.black-shadow.subtitle Wohin sollen Sie fahren?
     hr
-    div.black-shadow
-      button(class=['select-all', 'button', 'tiny']) Alles 
-      | &nbsp;
-      button(class=['select-none', 'button', 'tiny']) Keine
-      div.darker-background.resort-container
-        ul
-          each r in availableResorts
-            li.resort-label
-              label
-                input(type='checkbox', class=['resort-checkbox'], name='resorts', value=r.name, 
-                  data-lat=r.lat, data-lon=r.lon, data-query=r.query, data-id=r.id)
-                span
-                  b #{r.name}
+    table.dark-background
+      tr
+        td(style="width: 49%;white-space: nowrap;text-align:right")
+          h3.black-shadow.subtitle Ich fahr von
+        td(style="width:1%;white-space: nowrap;")
+          ul.departure-list.black-shadow
+            for dep in availableDepaturePoints
+              +from_location(dep.key, dep.name)
+        td(style="width: 49%;white-space: nowrap;text-align:right")
+          h3.black-shadow.subtitle ab.   
 
-        button(class=['get-weather', 'button', 'radius', 'large', 'expand', 'no-margin']) Los!
-      img#loader(src='/images/loader.gif', style='display:none')
-
-    hr
-
-    div(id='the-weather', class='row')
-      ul
-      
-    div.row.footer
-      h5 von Erik Jonsson Thorén,
-        a(href='http://www.erikfromsweden.org') www.erikfromsweden.org
-      small Weather Provider: http://openweathermap.org/
-
-
-  script(type='text/javascript' src='/javascripts/jquery2.1.0.js')
-  script(type='text/javascript' src='/javascripts/alpwetter.js')
-
-
-  li(class='template-weather-node', style=['display:none'])
-    h2.black-shadow City
-    
-    table.darker-background
-      thead
+    if from_key
+      table.resort-table.dark-background
         tr
-          th(colspan=2) 
-            i(class=['foundicon-plus', 'hide-show-weather-details'], onclick='hideshow(this)') Mehr
-          th Heute
-          th Morgen
-          th Day+2
-          th Day+3
-          th Day+4
-          th Day+5
-          th Day+6
-      tbody
-        tr(class='icon')
-          td
-          td 
-          +tableFiller('-')
+          th(style="width:1%") 
+            i(class="fa fa-map-o " aria-hidden="true")
+            br
+            i(class="fa fa-arrows-h" aria-hidden="true") 
+          th(style="width:230px;") 
+            i(class="fa fa-train" aria-hidden="true")
+            br
+            small Abfährt Morgen 6h50
+          th(style="width:150px;") 
+            i(class="wi wi-day-sunny" aria-hidden="true")
+            br
+            small Morgen 12 Uhr
+          th 
+        for distance_and_resort in resorts_with_distance
+          tr(id=distance_and_resort.resort.key)
+            td(style="white-space:nowrap;text-align:right")
+              span #{distance_and_resort.distance.toFixed(0)}
+                small km
+            td.travel-time(style="text-align:center")
+            td.weather(style="white-space:nowrap;text-align:right;vertical-align:top")
+            td #{distance_and_resort.resort.name}
 
-        tr(class='weather')
-          td
-          td Himmel
-          +tableFiller('Clear')
 
-        tr(class='clouds')
-          td
-          td Wolken
-          +tableFiller('0mm')
 
-        tr(class=['morn-temp', 'hideable'])
-          td
-          td Morning Temp
-          +tableFiller('0')
 
-        tr(class='day-temp')
-          td
-          td Midday Temp
-          +tableFiller('1')
 
-        tr(class=['even-temp', 'hideable'])
-          td
-          td Evening Temp
-          +tableFiller('2')
+      script.
+        document.departure_from = !{JSON.stringify(from)};
+        document.available_resorts = !{JSON.stringify(available_resorts)};
+        function google_ready(){
+          var directionsService = new google.maps.DirectionsService;
+          from = document.departure_from;
 
-        tr(class=['wind', 'hideable'])
-          td
-          td Wind
-          +tableFiller('2 m/s')
+          tomorrow_at_7 = new Date()
+
+          if(tomorrow_at_7.getHours() > 7){
+              tomorrow_at_7.setDate(tomorrow_at_7.getDate() + 1)
+          }
+          tomorrow_at_7.setHours(6, 45, 0, 0);
+
+          fn = function(list){
+            if (list.length == 0)
+                return;
+
+            resort = list.pop();
+            console.log(new Date() + ' - requesting data for ' + resort.query)
+            
+            directionsService.route({
+                origin: from.name,
+                destination: resort.query,
+                travelMode: 'TRANSIT',
+                transitOptions: { departureTime: tomorrow_at_7 },
+                provideRouteAlternatives: false,
+            }, function(response, status) {
+                if (status === 'OK') {
+                    route = response.routes[0];
+                    total_distance = route.legs.reduce((prev, curr) => prev + curr.distance.value, 0) // in meters
+                    departure_time = route.legs[0].departure_time  // JavaScript Date
+                    arrival_time = route.legs[route.legs.length-1].arrival_time // JavaScript Date
+                    set_distance_and_duration_for_destiantion(resort, total_distance, departure_time, arrival_time)
+                } else {
+                  console.log("failed for " + resort.query + ": "+status);
+                    (function(r){
+                        setTimeout(function() { fn([r]) }, 500);
+                    })(resort);
+                }
+                setTimeout(function() { fn(list) }, 50)
+              });
+            };    
+
+            fn(document.available_resorts.slice(0))
+          }
+
+          function set_distance_and_duration_for_destiantion(destination, distance, departure, arrival){
+            console.log("SETTING GOOGLE DATA for " + destination.query);
+              duration_in_min = (arrival.value - departure.value)/1000/60;
+              hours = Math.floor(duration_in_min/60)
+              mins = duration_in_min % 60;
+
+              $("table.resort-table tr#" + destination.key + " td.travel-time").html(hours + "<small>h</small>" + mins.toFixed(0) + "<small>m</small>")
+          }
+      - var GOOGLE_DIRECTIONS_API_KEY = 'AIzaSyAxdmse00dVYba1hYMjhEZmSk1pLqHXPfE'
+
+      script(src='https://maps.googleapis.com/maps/api/js?key=#{GOOGLE_DIRECTIONS_API_KEY}&callback=google_ready')
+      link(rel='stylesheet', href='/stylesheets/font-awesome.min.css')
+
+      script.
+        jQuery(function(){
+          for (resort of document.available_resorts){
+              (function(r){
+                  getWeatherByWoeid(r.id, r.query, function(data, query){
+                    icon = weatherIconsMap[data.list[1].weather[0].icon.substring(0,2)];
+                    $("table.resort-table tr#" + r.key + " td.weather").html('<small>'+data.list[1].main.temp.toFixed(0) + ' °C</small> <i class="wi ' + icon + '"\>')
+                  })
+              })(resort);
+          }
+        }); 

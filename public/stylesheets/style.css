@@ -9,13 +9,18 @@ body{
 	background-color: black;
 	background-attachment: fixed;
 	background-repeat:no-repeat;
-	margin-top: 50px;
+	padding-top: 50px;
 	font-family: 'Gafata', sans-serif;
 
 }
 
 a{
 	color:white;
+	text-decoration: underline;
+	text-decoration-style: solid;
+}
+a:hover{
+	color:#fff641;
 }
 
 ul { 
@@ -60,6 +65,7 @@ hr{
 	border-style: solid;
 
     background: rgba(255, 255, 255, 0.15);
+	/*box-shadow: 0 0 50px rgba(255, 255, 255, 0.3);*/
 	/*border-left-width: 15px;*/
 	/*border-right-width: 5px;*/
 }
@@ -70,6 +76,14 @@ hr{
 
 .darker-background{
     background: rgba(0, 0, 0, 0.25);
+}
+table.dark-background{
+	border: 0;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+table.darker-background{
+    background: rgba(0, 0, 0, 0.5);
 }
 
 .white-shadow{
@@ -86,10 +100,12 @@ hr{
 .title-text{
 	font-family: 'Monoton', cursive;
 	font-size: 80pt;
+	text-align: center;
 }
 
 .footer{
 	text-align: center;
+	text-shadow: 0 0 6px black;
 }
 
 .subtitle{
@@ -111,6 +127,8 @@ hr{
 	width: 200px;
 	height: 30px;
 
+	text-shadow: 0 0 5px black;
+
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -131,7 +149,6 @@ hr{
 
 label{
 	font-size: 12pt;
-
 }
 
 .resort-label span{
@@ -141,4 +158,44 @@ label{
 
 .resort-label:hover{
     background: rgba(0, 0, 0, 0.5);
+}
+
+ul.departure-list{
+	font-size: 1.5em;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+}
+
+ul.departure-list li.selected a{
+	color: white;
+	text-decoration: underline;
+	font-weight: bold;
+	font-size: 1.25em
+}
+
+ul.departure-list li.unselected a{
+	color: white;
+	text-decoration: none;
+	font-size: 0.75em
+}
+
+ul.departure-list li.unselected a:hover{
+	color: rgba(255, 255, 255, 1);
+	text-decoration: underline;
+}
+
+table.resort-table{
+	padding: 10px;
+	text-shadow: 0 0 2px black;
+	background-color: rgba(0, 0, 0, 0.7)
+}
+
+table.resort-table tr th{
+	font-size: 2em;
+	padding-top:20px;
+}
+table.resort-table tr td{
+	font-size: 2em;
+	padding:20px;
 }

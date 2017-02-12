@@ -8,7 +8,7 @@ var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
-
+var sqlite3 = require('sqlite3').verbose();
 var app = express();
 
 // all environments
@@ -29,7 +29,12 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/users', user.list);
+app.get('/von/:from', routes.index);
+app.get('/api/weather', user.woeid);
+
+var db = new sqlite3.Database('cache.sqlite3');
+db.run("create table if not exists weather (woeid int not null primary key, last_updated datetime not null, data text)");
+db.close();
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
